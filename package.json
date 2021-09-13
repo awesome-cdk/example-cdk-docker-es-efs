@@ -1,6 +1,7 @@
 {
   "name": "experiment-cdk-es-within-ecs",
-  "version": "0.1.0",
+  "version": "0.0.0",
+  "private": true,
   "bin": {
     "experiment-cdk-es-within-ecs": "bin/experiment-cdk-es-within-ecs.js"
   },
@@ -11,17 +12,20 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.117.0",
-    "@types/jest": "^26.0.10",
-    "@types/node": "10.17.27",
-    "jest": "^26.4.2",
-    "ts-jest": "^26.2.0",
-    "aws-cdk": "1.117.0",
-    "ts-node": "^9.0.0",
-    "typescript": "~3.9.7"
+    "@aws-cdk/assert": "^1.122.0",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.9.1",
+    "aws-cdk": "^1.122.0",
+    "jest": "^27.1.1",
+    "ts-jest": "^27.0.5",
+    "ts-node": "^10.2.1",
+    "typescript": "~4.4.3"
   },
   "dependencies": {
-    "@aws-cdk/core": "1.117.0",
-    "source-map-support": "^0.5.16"
+    "@aws-cdk/aws-ec2": "^1.122.0",
+    "@aws-cdk/aws-ecs": "^1.122.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.122.0",
+    "@aws-cdk/core": "^1.122.0",
+    "source-map-support": "^0.5.20"
   }
 }

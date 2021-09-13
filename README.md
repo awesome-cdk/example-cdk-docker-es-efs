@@ -1,14 +1,13 @@
-# Welcome to your CDK TypeScript project!
+# ElasticSearch on AWS
 
-This is a blank project for TypeScript development with CDK.
+### Based on AWS CDK, ECS, Fargate, ElasticSearch
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+This is an experiment in getting ElasticSearch to run in a semi-managed environment.
 
-## Useful commands
+We start off by creating an AWS ECS Cluster and Fargate containers that run in it. Those containers run the official
+ElasticSearch Docker image in Fargate mode.
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+TODO:
+[ ] Healthchecks of ECS service
+[ ] Mount an EFS volume so ElasticSearch data is persisted
+[ ] Kibana for easier administration

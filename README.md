@@ -10,6 +10,7 @@ We start off by creating an AWS ECS Cluster and Fargate containers that run in i
 ElasticSearch Docker image in Fargate mode.
 
 TODO:
-[ ] Healthchecks of ECS service
-[ ] Mount an EFS volume so ElasticSearch data is persisted
-[ ] Kibana for easier administration
+
+* [ ] Healthchecks of ECS service
+* [ ] Mount an EFS volume so ElasticSearch data is persisted
+* [ ] Kibana for easier administration

@@ -1,16 +1,10 @@
 import * as cdk from '@aws-cdk/core';
-import {
-    Cluster,
-    ContainerImage,
-    FargateService,
-    FargateTaskDefinition,
-    LogDriver,
-    Protocol as EcsProtocol,
-} from "@aws-cdk/aws-ecs";
+import {Duration} from '@aws-cdk/core';
+import {Cluster,} from "@aws-cdk/aws-ecs";
 import {ApplicationLoadBalancer, ApplicationProtocol, Protocol} from "@aws-cdk/aws-elasticloadbalancingv2";
-import {RetentionDays} from "@aws-cdk/aws-logs";
 import {CheapVPC} from "./constructs/CheapVPC";
 import {ElasticSearchService} from "./constructs/ElasticSearchService";
+import {Efs} from "./constructs/Efs";
 
 export class ExperimentCdkEsWithinEcsStack extends cdk.Stack {
 
@@ -19,6 +13,8 @@ export class ExperimentCdkEsWithinEcsStack extends cdk.Stack {
 
         const vpc = new CheapVPC(this, 'Vpc');
 
+        const fs = new Efs(this, 'EFS', {vpc});
+
         const cluster = new Cluster(this, 'Cluster', {
             vpc,
             enableFargateCapacityProviders: true,
@@ -26,11 +22,16 @@ export class ExperimentCdkEsWithinEcsStack extends cdk.Stack {
 
         const service = new ElasticSearchService(this, 'ES', {
             cluster,
+            fs,
         })
 
         const alb = new ApplicationLoadBalancer(this, 'ALB', {vpc, internetFacing: true});
 
-        const port = 9200;
+        ExperimentCdkEsWithinEcsStack.addTarget(alb, service, 9200);
+        // ExperimentCdkEsWithinEcsStack.addTarget(alb, service, 9300);
+    }
+
+    private static addTarget(alb: ApplicationLoadBalancer, service: ElasticSearchService, port: number) {
         const protocol = ApplicationProtocol.HTTP;
 
         alb.addListener(`listener-${port}`, {
@@ -43,12 +44,14 @@ export class ExperimentCdkEsWithinEcsStack extends cdk.Stack {
                 service.service.loadBalancerTarget({
                     containerName: service.containerName,
                     containerPort: port,
-                    protocol: EcsProtocol.TCP,
-                }),
+                })
             ],
             healthCheck: {
                 protocol: Protocol.HTTP,
                 port: String(port),
+                unhealthyThresholdCount: 5,
+                healthyThresholdCount: 5,
+                interval: Duration.seconds(60),
             }
         });
     }
